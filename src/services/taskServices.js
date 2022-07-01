@@ -72,14 +72,17 @@ class taskServices {
       }
       let seconds = parseInt(sec);
 
-      let minutes = Math.floor(seconds / 60);
-      seconds = seconds - minutes * 60;
-      let hours = Math.floor(minutes / 60);
-      minutes = minutes - hours * 60;
-      let days = Math.floor(hours / 24);
-      hours = hours - days * 24;
-      let years = Math.floor(days / 365);
-      days = days - years * 365;
+      if (sec === 0) {
+        return {
+          message: "now",
+        };
+      }
+      let message = "";
+      let years = Math.floor(seconds / (3600 * 24) / 365);
+      let days = Math.floor(seconds / (3600 * 24) - years * 365);
+      let hours = Math.floor((seconds % (3600 * 24)) / 3600);
+      let minutes = Math.floor((seconds % 3600) / 60);
+      seconds = Math.floor(seconds % 60);
 
       console.log(years);
       console.log(days);
@@ -87,9 +90,14 @@ class taskServices {
       console.log(minutes);
       console.log(seconds);
 
-      if (years>1) message+=`${years} years`
-      else if (years===1) message+=`${years} year`
-    
+      message += years > 0 ? years + (years == 1 ? " year, " : " years, ") : "";
+      message += hours > 0 ? hours + (hours == 1 ? " hour, " : " hours, ") : "";
+      message +=
+        minutes > 0
+          ? minutes + (minutes == 1 ? " minute, " : " minutes, ")
+          : "";
+      message +=
+        seconds > 0 ? seconds + (seconds == 1 ? " second" : " seconds") : "";
 
       return {
         message,
